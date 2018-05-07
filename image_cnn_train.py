@@ -8,6 +8,7 @@ import numpy as np
 
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
+import time
 
 from deep_image_load_data import load_data
 from image_cnn_model import Image_CNN
@@ -26,12 +27,12 @@ validation_step = 50
 
 
 
-def train(batch_size, data_dir, n_label):
+def train(batch_size, data_dir, n_label, is_expanding):
     # Some parameters
 
     # Prepare mnist data
     train_data, train_labels, validation_data, validation_labels = load_data(
-        data_dir, n_label, validation_rate=0.2, is_expanding=False)
+        data_dir, n_label, validation_rate=0.2, is_expanding=is_expanding)
     train_size = len(train_data)
     if train_size == 0:
         raise Exception("no train data!")
@@ -166,4 +167,8 @@ if __name__ == '__main__':
     batch_size = TRAIN_BATCH_SIZE
     data_dir = data_dirs[REAL_SET]
     n_label = 65
-    train(batch_size, data_dir, n_label)
+    is_expanding = True
+    start = time.time()
+    train(batch_size, data_dir, n_label, is_expanding)
+    end = time.time()
+    print("total time cost: %d" % (end - start))
