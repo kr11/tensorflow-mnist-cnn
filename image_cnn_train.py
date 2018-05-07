@@ -17,7 +17,7 @@ MODEL_DIRECTORY = "model/model.ckpt"
 LOGS_DIRECTORY = "logs/train"
 
 # Params for Train
-training_epochs = 10  # 10 for augmented training data, 20 for training data
+training_epochs = 15  # 10 for augmented training data, 20 for training data
 TRAIN_BATCH_SIZE = 50
 display_step = 10
 validation_step = 50
@@ -117,7 +117,7 @@ def train(batch_size, data_dir, n_label, is_expanding):
 
             # Run optimization op (backprop), loss op (to get loss value)
             # and summary nodes
-            loss, _, train_accuracy, summary = sess.run([loss, train_step, accuracy, merged_summary_op],
+            train_loss, _, train_accuracy, summary = sess.run([loss, train_step, accuracy, merged_summary_op],
                                                         feed_dict={x: batch_xs, y_: batch_ys, is_training: True})
 
             # Write logs at every iteration
@@ -126,7 +126,7 @@ def train(batch_size, data_dir, n_label, is_expanding):
             # Display logs
             if i % display_step == 0:
                 print("Epoch:", '%04d,' % (epoch + 1),
-                      "batch_index %4d/%4d, training accuracy %.5f, loss %.5f" % (i, total_batch, train_accuracy, loss))
+                      "batch_index %4d/%4d, training accuracy %.5f, loss %.5f" % (i, total_batch, train_accuracy, train_loss))
 
             # Get accuracy for validation data
             if i % validation_step == 0:
@@ -167,7 +167,7 @@ data_dirs = [
 if __name__ == '__main__':
     batch_size = TRAIN_BATCH_SIZE
     data_dir = data_dirs[CLIP_ART_SET]
-    n_label = 65
+    n_label = 2
     is_expanding = False
     start = time.time()
     train(batch_size, data_dir, n_label, is_expanding)
