@@ -107,7 +107,6 @@ def train(batch_size, data_dir, n_label, is_expanding):
         train_data[:], train_labels[:] = zip(*data_labels)
         # Loop over all batches
         for i in range(total_batch):
-
             # Compute the offset of the current minibatch in the data.
             offset = (i * batch_size) % (train_size)
             try:
@@ -118,8 +117,8 @@ def train(batch_size, data_dir, n_label, is_expanding):
 
             # Run optimization op (backprop), loss op (to get loss value)
             # and summary nodes
-            _, train_accuracy, summary = sess.run([train_step, accuracy, merged_summary_op],
-                                                  feed_dict={x: batch_xs, y_: batch_ys, is_training: True})
+            loss, _, train_accuracy, summary = sess.run([loss, train_step, accuracy, merged_summary_op],
+                                                        feed_dict={x: batch_xs, y_: batch_ys, is_training: True})
 
             # Write logs at every iteration
             summary_writer.add_summary(summary, epoch * total_batch + i)
@@ -127,23 +126,25 @@ def train(batch_size, data_dir, n_label, is_expanding):
             # Display logs
             if i % display_step == 0:
                 print("Epoch:", '%04d,' % (epoch + 1),
-                      "batch_index %4d/%4d, training accuracy %.5f" % (i, total_batch, train_accuracy))
+                      "batch_index %4d/%4d, training accuracy %.5f, loss %.5f" % (i, total_batch, train_accuracy, loss))
 
             # Get accuracy for validation data
             if i % validation_step == 0:
                 # Calculate accuracy
-                validation_accuracy = sess.run(accuracy,
+                validation_accuracy, valid_loss = sess.run([accuracy, loss],
                                                feed_dict={x: validation_data, y_: validation_labels,
                                                           is_training: False})
 
                 print("Epoch:", '%04d,' % (epoch + 1),
-                      "batch_index %4d/%4d, validation accuracy %.5f" % (i, total_batch, validation_accuracy))
+                      "batch_index %4d/%4d, validation accuracy %.5f, loss %.5f" %
+                      (i, total_batch, validation_accuracy,valid_loss))
 
             # Save the current model if the maximum accuracy is updated
             if validation_accuracy > max_acc:
                 max_acc = validation_accuracy
                 save_path = saver.save(sess, MODEL_DIRECTORY)
                 print("Model updated and saved in file: %s" % save_path)
+
 
     print("Optimization Finished!")
 
@@ -165,9 +166,9 @@ data_dirs = [
 
 if __name__ == '__main__':
     batch_size = TRAIN_BATCH_SIZE
-    data_dir = data_dirs[REAL_SET]
+    data_dir = data_dirs[CLIP_ART_SET]
     n_label = 65
-    is_expanding = True
+    is_expanding = False
     start = time.time()
     train(batch_size, data_dir, n_label, is_expanding)
     end = time.time()
