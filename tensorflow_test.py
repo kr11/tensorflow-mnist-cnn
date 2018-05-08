@@ -1,47 +1,27 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import cv2
-import os
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
 
-from scipy import misc, ndimage
+import smtplib
+from email.mime.text import MIMEText
+from email.header import Header
 
-print("asd")
-img_dir = '/Users/kangrong/data/image_dataset/deep_learning_dataset/hw2_dataset/dset1/train/label1/'
-img = cv2.imread(os.path.join(img_dir,'00001.jpg'))
+sender = 'from@cnn_hw.com'
+receivers = ['494752551@qq.com']  # 接收邮件，可设置为你的QQ邮箱或者其他邮箱
 
-# img_height, img_width = np.shape(img)[0:2]
-# bg_value = float(np.median(img[0:img_height/10, 0:img_width/10, :]))
-bg_value = float(np.median(img))
-img_rote = ndimage.rotate(img, 30, reshape=False, cval=bg_value)
+mail_msg = """
+<p>Python 邮件发送测试...</p>
+<p><a href="http://www.runoob.com">这是一个链接</a></p>
+"""
+message = MIMEText(mail_msg, 'html', 'utf-8')
+message['From'] = Header("菜鸟教程", 'utf-8')
+message['To'] = Header("测试", 'utf-8')
 
-shift_img = ndimage.shift(img, [-20, 20, 0], cval=bg_value)
-flip_img = np.flipud(img)
-# flip_img = np.fliplr(img)
-plt.subplot(321)
-plt.imshow(img)
-plt.title('org')
+subject = 'Python SMTP 邮件测试'
+message['Subject'] = Header(subject, 'utf-8')
 
-plt.subplot(322)
-plt.imshow(img_rote)
-plt.title('rote90')
-
-plt.subplot(323)
-plt.imshow(shift_img)
-plt.title('shift -10, 10')
-
-plt.subplot(324)
-plt.imshow(flip_img)
-plt.title('flip')
-
-# plt.subplot(325)
-# plt.imshow(shift_img)
-# plt.title('shift -10, 10')
-#
-# plt.subplot(326)
-# plt.imshow(flip_img)
-# plt.title('flip')
-
-# for i,color in enumerate("rgby"):
-#         plt.subplot(221+i, axisbg=color)
-
-plt.show()
+# try:
+smtpObj = smtplib.SMTP('localhost')
+smtpObj.sendmail(sender, receivers, message.as_string())
+print("邮件发送成功")
+# except smtplib.SMTPException:
+#     print("Error: 无法发送邮件")

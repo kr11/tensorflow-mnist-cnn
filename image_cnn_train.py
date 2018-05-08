@@ -66,6 +66,7 @@ def train(batch_size, data_dir, n_label, is_expanding):
             0.95,  # Decay rate.
             staircase=True)
         # Use simple momentum for the optimization.
+        # train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss, global_step=batch)
         train_step = tf.train.AdamOptimizer(learning_rate).minimize(loss, global_step=batch)
 
     # Create a summary to monitor learning_rate tensor
@@ -167,7 +168,7 @@ data_dirs = [
 if __name__ == '__main__':
     batch_size = TRAIN_BATCH_SIZE
     data_dir = data_dirs[CLIP_ART_SET]
-    n_label = 2
+    n_label = 65
     is_expanding = False
     start = time.time()
     train(batch_size, data_dir, n_label, is_expanding)
