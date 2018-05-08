@@ -53,7 +53,7 @@ def read_image(image_name):
     return im_ar
 
 
-def expanding(im_ar, label, train_xs, train_ys, expanding_size=2, flip_prob=0.5):
+def expanding(im_ar, label, train_xs, train_ys, expanding_size=4, flip_prob=0.5):
     """
     :return:
     """
@@ -69,8 +69,8 @@ def expanding(im_ar, label, train_xs, train_ys, expanding_size=2, flip_prob=0.5)
         # flip with certain probability
         if np.random.rand() > flip_prob:
             new_img = np.fliplr(new_img)
-        if np.random.rand() > flip_prob:
-            new_img = np.flipud(new_img)
+        # if np.random.rand() > flip_prob:
+        #     new_img = np.flipud(new_img)
         train_xs.append(new_img)
         train_ys.append(label)
 

@@ -116,7 +116,7 @@ def train():
 
             # Write logs at every iteration
             summary_writer.add_summary(summary, epoch * total_batch + i)
-
+            print("train_size: %d" % train_size)
             # Display logs
             if i % display_step == 0:
                 print("Epoch:", '%04d,' % (epoch + 1),

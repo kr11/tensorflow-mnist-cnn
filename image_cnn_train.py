@@ -173,4 +173,8 @@ if __name__ == '__main__':
     start = time.time()
     train(batch_size, data_dir, n_label, is_expanding)
     end = time.time()
+    if data_dir == data_dirs[CLIP_ART_SET]:
+        print("dataset: CLIP_ART_SET")
+    else:
+        print("dataset: REAL_SET")
     print("total time cost: %d" % (end - start))
