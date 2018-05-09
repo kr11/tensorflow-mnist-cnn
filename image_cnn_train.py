@@ -146,8 +146,7 @@ def train(batch_size, data_dir, n_label, is_expanding):
                 save_path = saver.save(sess, MODEL_DIRECTORY)
                 print("Model updated and saved in file: %s" % save_path)
 
-
-    print("Optimization Finished!")
+    print("Optimization Finished!, max acc: %.5f" % max_acc)
 
     # Restore variables from disk
     saver.restore(sess, MODEL_DIRECTORY)
