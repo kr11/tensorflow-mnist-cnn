@@ -20,7 +20,7 @@ TEST_BATCH_SIZE = 5000
 def test(data_dir, model_directory, batch_size, n_label):
     # Import data
     test_data, test_labels, _, _ = load_data(
-        data_dir, n_label, validation_rate=0.8, is_expanding=False)
+        data_dir, n_label, validation_rate=0, is_expanding=False)
 
     is_training = tf.placeholder(tf.bool, name='MODE')
 

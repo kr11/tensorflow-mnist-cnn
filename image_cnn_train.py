@@ -171,7 +171,7 @@ def build_parser():
 
 if __name__ == '__main__':
     """
-    python image_cnn_train.py --train-data-dir dset1/train --n_label 2 --batch-size 50 --use-data-aug False
+    python image_cnn_train.py --train-data-dir dset1/train --n_label 65 --batch-size 50 --use-data-aug False
     """
     # train_data_dir = 'dset2/train'
     # batch_size = 65
