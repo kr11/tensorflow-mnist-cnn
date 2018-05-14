@@ -5,6 +5,7 @@ from __future__ import division
 from __future__ import print_function
 
 import numpy as np
+from argparse import ArgumentParser
 
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
@@ -125,7 +126,7 @@ def train(batch_size, data_dir, n_label, is_expanding):
             if i % display_step == 0:
                 print("Epoch:", '%04d,' % (epoch + 1),
                       "batch_index %4d/%4d, training accuracy %.5f, loss %.5f" % (
-                      i, total_batch, train_accuracy, train_loss))
+                          i, total_batch, train_accuracy, train_loss))
 
             # Get accuracy for validation data
             if i % validation_step == 0:
@@ -149,25 +150,43 @@ def train(batch_size, data_dir, n_label, is_expanding):
     # Restore variables from disk
     saver.restore(sess, MODEL_DIRECTORY)
 
+# build parser
+def build_parser():
+    parser = ArgumentParser()
 
-REAL_SET = 0
-CLIP_ART_SET = 1
+    parser.add_argument('--train-data-dir',
+                        dest='train_data_dir', help='the directory of test data',
+                        metavar='TRAIN_DATA_DIR', required=True)
+    parser.add_argument('--n_label', type=int,
+                        dest='n_label', help='the number of labels',
+                        metavar='N_LABEL', required=True)
+    parser.add_argument('--batch-size', type=int,
+                        dest='batch_size', help='batch size for test',
+                        metavar='BATCH_SIZE', required=True)
+    parser.add_argument('--use-data-aug', type=bool,
+                        dest='use_data_aug', help='use data augmentation',
+                        metavar='USE_DATA_AUG', required=True)
+    return parser
 
-data_dirs = [
-    'dset1',
-    'dset2',
-]
 
 if __name__ == '__main__':
-    batch_size = TRAIN_BATCH_SIZE
-    data_dir = data_dirs[CLIP_ART_SET]
-    n_label = 65
-    is_expanding = False
+    """
+    python image_cnn_train.py --train-data-dir dset1/train --n_label 2 --batch-size 50 --use-data-aug False
+    """
+    # train_data_dir = 'dset2/train'
+    # batch_size = 65
+    # batch_size = TRAIN_BATCH_SIZE
+    # use_data_aug = False
+
+    # Parse argument
+    parser = build_parser()
+    options = parser.parse_args()
+    train_data_dir = options.train_data_dir
+    n_label = options.n_label
+    batch_size = options.batch_size
+    use_data_aug = options.use_data_aug
+
     start = time.time()
-    train(batch_size, data_dir, n_label, is_expanding)
+    train(batch_size, train_data_dir, n_label, use_data_aug)
     end = time.time()
-    if data_dir == data_dirs[CLIP_ART_SET]:
-        print("dataset: CLIP_ART_SET")
-    else:
-        print("dataset: REAL_SET")
     print("total time cost: %d" % (end - start))
