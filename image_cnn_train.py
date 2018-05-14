@@ -17,7 +17,7 @@ MODEL_DIRECTORY = "model/model.ckpt"
 LOGS_DIRECTORY = "logs/train"
 
 # Params for Train
-training_epochs = 15  # 10 for augmented training data, 20 for training data
+training_epochs = 10  # 10 for augmented training data, 20 for training data
 TRAIN_BATCH_SIZE = 50
 display_step = 10
 validation_step = 50

@@ -1,9 +1,7 @@
-# Some code was borrowed from https://github.com/petewarden/tensorflow_makefile/blob/master/tensorflow/models/image/mnist/convolutional.py
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import tensorflow as tf
 import tensorflow.contrib.slim as slim
 
 
@@ -31,7 +29,7 @@ def Image_CNN(x, n_labels, is_training=True):
         # weights_initializer = initializers.xavier_initializer(),
         # biases_initializer = init_ops.zeros_initializer,
         # net = slim.fully_connected(net, 1024, scope='fc3')
-        net = slim.fully_connected(net, 256, scope='fc3')
-        net = slim.dropout(net, is_training=is_training, scope='dropout3')  # 0.5 by default
+        net = slim.fully_connected(net, 1024, scope='fc3')
+        net = slim.dropout(net, keep_prob=0.5, is_training=is_training, scope='dropout3')  # 0.5 by default
         outputs = slim.fully_connected(net, n_labels, activation_fn=None, normalizer_fn=None, scope='fco')
     return outputs
