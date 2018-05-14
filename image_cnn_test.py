@@ -38,7 +38,8 @@ def test(data_dir, model_directory, batch_size, n_label):
     saver = tf.train.Saver()
 
     # Calculate accuracy for all mnist test images
-    test_size = test_data.shape[0]
+    test_size = len(test_data)
+    print("size of test data: %d" % len(test_data))
     total_batch = int(test_size / batch_size)
 
     saver.restore(sess, model_directory)
@@ -65,15 +66,15 @@ def build_parser():
     parser.add_argument('--model-dir',
                         dest='model_directory', help='directory where model to be tested is stored',
                         metavar='MODEL_DIRECTORY', required=True)
-    parser.add_argument('--test-data-dir', type=int,
+    parser.add_argument('--test-data-dir',
                         dest='test_data_dir', help='the directory of test data',
-                        metavar='TEST_BATCH_SIZE', required=True)
+                        metavar='TEST_DATA_DIR', required=True)
     parser.add_argument('--n_label', type=int,
                         dest='n_label', help='the number of labels',
-                        metavar='TEST_BATCH_SIZE', required=True)
+                        metavar='N_LABEL', required=True)
     parser.add_argument('--batch-size', type=int,
                         dest='batch_size', help='batch size for test',
-                        metavar='TEST_BATCH_SIZE', required=True)
+                        metavar='BATCH_SIZE', required=True)
     return parser
 
 
