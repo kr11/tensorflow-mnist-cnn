@@ -20,7 +20,7 @@ TEST_BATCH_SIZE = 5000
 def test(data_dir, model_directory, batch_size, n_label):
     # Import data
     test_data, test_labels, _, _ = load_data(
-        data_dir, n_label, validation_rate=0, is_expanding=False)
+        data_dir, n_label, validation_rate=0.8, is_expanding=False)
 
     is_training = tf.placeholder(tf.bool, name='MODE')
 
@@ -40,6 +40,8 @@ def test(data_dir, model_directory, batch_size, n_label):
     # Calculate accuracy for all mnist test images
     test_size = len(test_data)
     print("size of test data: %d" % len(test_data))
+    if test_size < batch_size:
+        batch_size = test_size
     total_batch = int(test_size / batch_size)
 
     saver.restore(sess, model_directory)
@@ -49,8 +51,8 @@ def test(data_dir, model_directory, batch_size, n_label):
     for i in range(total_batch):
         # Compute the offset of the current minibatch in the data.
         offset = (i * batch_size) % (test_size)
-        batch_xs = test_data[offset:(offset + batch_size), :]
-        batch_ys = test_labels[offset:(offset + batch_size), :]
+        batch_xs = test_data[offset:(offset + batch_size)]
+        batch_ys = test_labels[offset:(offset + batch_size)]
 
         y_final = sess.run(y, feed_dict={x: batch_xs, y_: batch_ys, is_training: False})
         correct_prediction = numpy.equal(numpy.argmax(y_final, 1), numpy.argmax(batch_ys, 1))
@@ -88,3 +90,4 @@ if __name__ == '__main__':
     n_label = options.n_label
     batch_size = options.batch_size
     test(test_data_dir, model_directory + '/model.ckpt', batch_size, n_label)
+    # test('dset2', 'model' + '/model.ckpt', 500, 2)
