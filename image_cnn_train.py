@@ -22,9 +22,9 @@ TRAIN_BATCH_SIZE = 50
 display_step = 10
 validation_step = 50
 
+
 # Params for test
 # TEST_BATCH_SIZE = 5000
-
 
 
 def train(batch_size, data_dir, n_label, is_expanding):
@@ -110,16 +110,13 @@ def train(batch_size, data_dir, n_label, is_expanding):
         for i in range(total_batch):
             # Compute the offset of the current minibatch in the data.
             offset = (i * batch_size) % (train_size)
-            try:
-                batch_xs = train_data[offset:(offset + batch_size)]
-                batch_ys = train_labels[offset:(offset + batch_size)]
-            except TypeError:
-                print()
+            batch_xs = train_data[offset:(offset + batch_size)]
+            batch_ys = train_labels[offset:(offset + batch_size)]
 
             # Run optimization op (backprop), loss op (to get loss value)
             # and summary nodes
             train_loss, _, train_accuracy, summary = sess.run([loss, train_step, accuracy, merged_summary_op],
-                                                        feed_dict={x: batch_xs, y_: batch_ys, is_training: True})
+                                                              feed_dict={x: batch_xs, y_: batch_ys, is_training: True})
 
             # Write logs at every iteration
             summary_writer.add_summary(summary, epoch * total_batch + i)
@@ -127,18 +124,19 @@ def train(batch_size, data_dir, n_label, is_expanding):
             # Display logs
             if i % display_step == 0:
                 print("Epoch:", '%04d,' % (epoch + 1),
-                      "batch_index %4d/%4d, training accuracy %.5f, loss %.5f" % (i, total_batch, train_accuracy, train_loss))
+                      "batch_index %4d/%4d, training accuracy %.5f, loss %.5f" % (
+                      i, total_batch, train_accuracy, train_loss))
 
             # Get accuracy for validation data
             if i % validation_step == 0:
                 # Calculate accuracy
                 validation_accuracy, valid_loss = sess.run([accuracy, loss],
-                                               feed_dict={x: validation_data, y_: validation_labels,
-                                                          is_training: False})
+                                                           feed_dict={x: validation_data, y_: validation_labels,
+                                                                      is_training: False})
 
                 print("Epoch:", '%04d,' % (epoch + 1),
                       "batch_index %4d/%4d, validation accuracy %.5f, loss %.5f" %
-                      (i, total_batch, validation_accuracy,valid_loss))
+                      (i, total_batch, validation_accuracy, valid_loss))
 
             # Save the current model if the maximum accuracy is updated
             if validation_accuracy > max_acc:
@@ -150,10 +148,6 @@ def train(batch_size, data_dir, n_label, is_expanding):
 
     # Restore variables from disk
     saver.restore(sess, MODEL_DIRECTORY)
-
-    # remove test code
-    # ...
-    # print("test accuracy for the stored model: %g" % numpy.mean(acc_buffer))
 
 
 REAL_SET = 0
